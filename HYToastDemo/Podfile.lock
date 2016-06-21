@@ -1,0 +1,16 @@
+PODS:
+  - CRToast (0.0.9)
+  - MZAppearance (1.1.6)
+  - Toast (3.0)
+
+DEPENDENCIES:
+  - CRToast (~> 0.0.9)
+  - MZAppearance (= 1.1.6)
+  - Toast (~> 3.0)
+
+SPEC CHECKSUMS:
+  CRToast: 5a78c22b921c5ed3487488af605bc403a9c92fed
+  MZAppearance: 0c06d3fa9cc55142f1da14bc8631fbe8fd6e19d5
+  Toast: 32c59229abfcf41850162b83bb9259dc84372473
+
+COCOAPODS: 0.39.0
