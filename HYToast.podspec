@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = 'HYToast'
   s.summary      = 'A toast with three style.'
-  s.version      = '0.0.1'
+  s.version      = '0.0.2'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.authors      = { 'huxiaoyang' => 'yohuyang@gmail.com' }
   s.homepage     = 'https://github.com/huxiaoyang/HYToast'
