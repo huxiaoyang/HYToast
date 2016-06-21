@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.homepage     = 'https://github.com/huxiaoyang/HYToast'
   s.platform     = :ios, '8.0'
   s.ios.deployment_target = '8.0'
-  s.source       = { :git => 'https://github.com/huxiaoyang/HYToast', :tag => s.version.to_s }
+  s.source       = { :git => 'https://github.com/huxiaoyang/HYToast.git', :tag => s.version.to_s }
 
   s.requires_arc = true
   s.source_files = 'HYToast/**/*.{h,m}'

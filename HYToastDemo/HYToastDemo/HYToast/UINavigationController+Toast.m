@@ -197,7 +197,7 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
 @implementation UIViewController (Toast)
 
 - (BOOL)bs_isViewAppear {
-    return [objc_getAssociatedObject(self, _cmd) boolValue];
+    return [(NSNumber *)objc_getAssociatedObject(self, _cmd) boolValue];
 }
 
 - (void)setBs_isViewAppear:(BOOL)bs_isViewAppear {
