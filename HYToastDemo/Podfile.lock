@@ -1,24 +1,12 @@
 PODS:
-  - ISMessages (1.0.2)
   - Toast (3.0)
 
 DEPENDENCIES:
-  - ISMessages (from `https://github.com/huxiaoyang/ISMessages.git`)
   - Toast (~> 3.0)
 
-EXTERNAL SOURCES:
-  ISMessages:
-    :git: https://github.com/huxiaoyang/ISMessages.git
-
-CHECKOUT OPTIONS:
-  ISMessages:
-    :commit: e18861479843c7cfa007331b2efb3aa9881dffa7
-    :git: https://github.com/huxiaoyang/ISMessages.git
-
 SPEC CHECKSUMS:
-  ISMessages: b8c1f8df6229cff3e69d1c815a0736e75a200bfa
   Toast: 32c59229abfcf41850162b83bb9259dc84372473
 
-PODFILE CHECKSUM: 8bd18923ebf8d50f9167355ac3974ed47883da63
+PODFILE CHECKSUM: 5bd1e75210d1865da0744018328bd3c3fb0594a8
 
 COCOAPODS: 1.1.1

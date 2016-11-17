@@ -9,19 +9,13 @@
 #import "BSToast.h"
 #import "UIViewController+CurrentVC.h"
 #import "UINavigationController+Toast.h"
+#import "ISMessages.h"
 
 #if __has_include(<Toast/UIView+Toast.h>)
 #import <Toast/UIView+Toast.h>
 #else
 #import "UIView+Toast.h"
 #endif
-
-#if __has_include(<ISMessages/ISMessages.h>)
-#import <ISMessages/ISMessages.h>
-#else
-#import "ISMessages.h"
-#endif
-
 
 
 
