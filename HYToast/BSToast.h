@@ -8,15 +8,27 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <Toast/UIView+Toast.h>
-#import "UINavigationController+Toast.h"
-#import <ISMessages/ISMessages.h>
+@class CSToastStyle;
+@class BSStatusToastStyle;
+@class ISMessagesStyle;
+
 
 
 typedef NS_ENUM(NSInteger, BSToastPosition) {
     BSToastPositionTop,
     BSToastPositionCenter,
     BSToastPositionBottom
+};
+
+typedef NS_ENUM(NSInteger, BSAlertToastType) {
+    // Green alert view with check mark image.
+    BSAlertToastTypeSuccess = 0,
+    // Red alert view with error image
+    BSAlertToastTypeError = 1,
+    // Orange alert view with warning image
+    BSAlertToastTypeWarning = 2,
+    // Light green alert with info image.
+    BSAlertToastTypeInfo = 3,
 };
 
 
@@ -51,5 +63,5 @@ typedef NS_ENUM(NSInteger, BSToastPosition) {
 + (void)showInfoToast:(NSString *)message;
 + (void)showToastWithTitle:(NSString *)title
                    message:(NSString *)message
-                 alertType:(ISAlertType)type;
+                 alertType:(BSAlertToastType)type;
 @end
