@@ -16,6 +16,7 @@ Pod::Spec.new do |s|
   s.module_name = 'HYToast'
 
   s.dependency "Toast", "~> 3.0"
-  s.dependency "ISMessages", :git => 'https://github.com/huxiaoyang/ISMessages.git'
+  s.dependency "ISMessages"
+
 
 end
