@@ -35,7 +35,7 @@
 /**
  *  判断当前view是否初始化完成
  */
-@property (nonatomic, assign) BOOL bs_isViewAppear;
+- (BOOL)bs_isViewVisible;
 
 @end
 

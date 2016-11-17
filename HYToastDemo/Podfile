@@ -4,7 +4,12 @@ platform :ios, '8.0'
 inhibit_all_warnings!
 
 target 'HYToastDemo' do
-    pod 'CRToast', '~> 0.0.9'
+    pod 'ISMessages', :git => 'https://github.com/huxiaoyang/ISMessages.git'
     pod 'Toast', '~> 3.0'
-    pod 'MZAppearance', '1.1.6'
+end
+
+post_install do |installer|
+    installer.pods_project.build_configuration_list.build_configurations.each do |configuration|
+        configuration.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
+    end
 end

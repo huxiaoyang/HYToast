@@ -22,7 +22,7 @@
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         self.tableView.rowHeight = 44;
         self.tableView.tableFooterView = [UIView new];
-        _items = @[@"toast", @"navigation bar toast", @"status toast"];
+        _items = @[@"toast", @"status toast", @"navigation Error toast", @"navigation Info toast", @"navigation Success toast", @"navigation Warning toast"];
     }
     
     return self;
@@ -35,21 +35,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 }
-
-
-/**
- *  如果调用showStatusToast：方法，重写下面两个方法并给bs_isViewAppear赋值
- */
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.bs_isViewAppear = YES;
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    self.bs_isViewAppear = NO;
-}
-
 
 
 - (void)didReceiveMemoryWarning {
@@ -81,11 +66,20 @@
     if ([cell.textLabel.text isEqualToString:@"toast"]) {
         [BSToast showToast:cell.textLabel.text];
     }
-    else if ([cell.textLabel.text isEqualToString:@"navigation bar toast"]) {
-        [BSToast showToastNotificationStyle:cell.textLabel.text];
-    }
     else if ([cell.textLabel.text isEqualToString:@"status toast"]) {
         [BSToast showStatusToast:cell.textLabel.text];
+    }
+    else if ([cell.textLabel.text isEqualToString:@"navigation Error toast"]) {
+        [BSToast showErrorToast:cell.textLabel.text];
+    }
+    else if ([cell.textLabel.text isEqualToString:@"navigation Info toast"]) {
+        [BSToast showInfoToast:cell.textLabel.text];
+    }
+    else if ([cell.textLabel.text isEqualToString:@"navigation Success toast"]) {
+        [BSToast showSuccessToast:cell.textLabel.text];
+    }
+    else if ([cell.textLabel.text isEqualToString:@"navigation Warning toast"]) {
+        [BSToast showWarningToast:cell.textLabel.text];
     }
 }
 

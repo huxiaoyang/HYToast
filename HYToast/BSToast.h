@@ -7,11 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MZAppearance.h"
 #import <UIKit/UIKit.h>
-#import "CRToast.h"
-#import "UIView+Toast.h"
+#import <Toast/UIView+Toast.h>
 #import "UINavigationController+Toast.h"
+#import <ISMessages/ISMessages.h>
 
 
 typedef NS_ENUM(NSInteger, BSToastPosition) {
@@ -25,28 +24,14 @@ typedef NS_ENUM(NSInteger, BSToastPosition) {
 
 #pragma mark - Properties
 
-
-@property (nonatomic, assign) BSToastPosition toastPosition MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) NSUInteger toastDuration MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) CSToastStyle *toastStyle MZ_APPEARANCE_SELECTOR;
-
-@property (nonatomic, strong) BSStatusToastStyle *statusToastStyle MZ_APPEARANCE_SELECTOR;
-
-@property (nonatomic, assign) CRToastType toastType MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) CRToastPresentationType toastPresentationType MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) NSTextAlignment toastTextAlignment MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) CRToastAnimationType toastAnimationInType MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) CRToastAnimationType toastAnimationOutType MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) CRToastAnimationDirection toastAnimationInDirection MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, assign) CRToastAnimationDirection toastAnimationOutDirection MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIFont *toastFont MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *toastTextColor MZ_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *toastBackgroundColor MZ_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) BSToastPosition toastPosition;
+@property (nonatomic, assign) NSUInteger toastDuration;
+@property (nonatomic, strong) CSToastStyle *toastStyle;
+@property (nonatomic, strong) BSStatusToastStyle *statusToastStyle;
+@property (nonatomic, strong) ISMessagesStyle *notificationToastStyle;
 
 
-
-#pragma mark - MZAppearance
-+ (id)appearance;
++ (instancetype)shareManager;
 
 
 #pragma mark - Android Toast style
@@ -60,7 +45,11 @@ typedef NS_ENUM(NSInteger, BSToastPosition) {
 
 
 #pragma mark - Notification Style
-- (void)showToastNotificationStyle:(NSString *)message;
-+ (void)showToastNotificationStyle:(NSString *)message;
-
++ (void)showSuccessToast:(NSString *)message;
++ (void)showErrorToast:(NSString *)message;
++ (void)showWarningToast:(NSString *)message;
++ (void)showInfoToast:(NSString *)message;
++ (void)showToastWithTitle:(NSString *)title
+                   message:(NSString *)message
+                 alertType:(ISAlertType)type;
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "UINavigationController+Toast.h"
-//#import "UIView+BSKit.h"
+#import "UIView+BSKit.h"
 #import <objc/runtime.h>
 
 
@@ -59,33 +59,36 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
         // 记录Toast本身
         objc_setAssociatedObject(self, &BSStatusToastActiveToastViewKey, toast, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         // 递归方法
-        if (self.presentedViewController) {
-            [self bs_showPresentedRecursionToast];
-        } else {
-            [self bs_showRecursionToast];
-        }
-        
+        [self bs_jadgeShowToast];
+    }
+}
+
+- (void)bs_jadgeShowToast {
+    if (self.presentedViewController) {
+        [self bs_showPresentedRecursionToast];
+    } else {
+        [self bs_showRecursionToast];
     }
 }
 
 - (void)bs_showRecursionToast {
-    if (self.topViewController.bs_isViewAppear) {
+    if (self.topViewController.bs_isViewVisible) {
         BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
         NSTimeInterval duration = [objc_getAssociatedObject(toast, &BSStatusToastDurationKey) doubleValue];
         [self bs_showToast:toast duration:duration];
     } else {
-        [self performSelector:@selector(bs_showRecursionToast) withObject:self afterDelay:0.3];
+        [self performSelector:@selector(bs_jadgeShowToast) withObject:self afterDelay:0.3];
     }
 }
 
 - (void)bs_showPresentedRecursionToast {
     UINavigationController *Nav = (UINavigationController *)self.presentedViewController;
-    if (Nav.topViewController.bs_isViewAppear) {
+    if ([Nav isKindOfClass:[UINavigationController class]] && Nav.topViewController.bs_isViewVisible) {
         BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
         NSTimeInterval duration = [objc_getAssociatedObject(toast, &BSStatusToastDurationKey) doubleValue];
         [self bs_showToast:toast duration:duration];
     } else {
-        [self performSelector:@selector(bs_showPresentedRecursionToast) withObject:self afterDelay:0.3];
+        [self performSelector:@selector(bs_jadgeShowToast) withObject:self afterDelay:0.3];
     }
 }
 
@@ -102,13 +105,13 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
                          
                          if (self.presentedViewController) {
                              UINavigationController *Nav = (UINavigationController *)self.presentedViewController;
-                             if (Nav.topViewController.view.frame.origin.y == 0 || Nav.topViewController.view.frame.origin.y == BSNavigationBarHeight) {
+                             if (Nav.topViewController.view.topValue == 0 || Nav.topViewController.view.topValue == BSNavigationBarHeight) {
                                  [Nav.topViewController.view setTransform:CGAffineTransformTranslate(Nav.topViewController.view.transform, 0, toast.statusToastStyle.toastHeight)];
                                  objc_setAssociatedObject(self, &BSStatusToastActivityViewKey, Nav.topViewController.view, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
                              }
                          }
                          else {
-                             if (self.topViewController.view.frame.origin.y == 0 || self.topViewController.view.frame.origin.y == BSNavigationBarHeight) {
+                             if (self.topViewController.view.topValue == 0 || self.topViewController.view.topValue == BSNavigationBarHeight) {
                                  [self.topViewController.view setTransform:CGAffineTransformTranslate(self.topViewController.view.transform, 0, toast.statusToastStyle.toastHeight)];
                                  objc_setAssociatedObject(self, &BSStatusToastActivityViewKey, self.topViewController.view, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
                              }
@@ -134,7 +137,7 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
                          
                          toast.frame = CGRectMake(0, BSNavigationBarHeight, [[UIScreen mainScreen] bounds].size.width, 0);
                          UIView *displayView = objc_getAssociatedObject(self, &BSStatusToastActivityViewKey);
-                         if (displayView.frame.origin.y == toast.statusToastStyle.toastHeight || displayView.frame.origin.y == toast.statusToastStyle.toastHeight+BSNavigationBarHeight) {
+                         if (displayView.topValue == toast.statusToastStyle.toastHeight || displayView.topValue == toast.statusToastStyle.toastHeight+BSNavigationBarHeight) {
                              [displayView setTransform:CGAffineTransformTranslate(displayView.transform, 0, -toast.statusToastStyle.toastHeight)];
                          }
                          
@@ -196,13 +199,8 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
 
 @implementation UIViewController (Toast)
 
-- (BOOL)bs_isViewAppear {
-    NSNumber *num = objc_getAssociatedObject(self, _cmd);
-    return [num boolValue];
-}
-
-- (void)setBs_isViewAppear:(BOOL)bs_isViewAppear {
-    objc_setAssociatedObject(self, @selector(bs_isViewAppear), @(bs_isViewAppear), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (BOOL)bs_isViewVisible {
+    return (self.isViewLoaded && self.view.window);
 }
 
 @end

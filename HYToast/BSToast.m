@@ -24,7 +24,7 @@ NSString *NSStringFromLLToastPosition(BSToastPosition position) {
 
 
 
-@interface BSToast () <MZAppearance>
+@interface BSToast ()
 
 @end
 
@@ -40,31 +40,21 @@ NSString *NSStringFromLLToastPosition(BSToastPosition position) {
         self.toastDuration = 1.5;
         self.toastPosition = BSToastPositionBottom;
         self.toastStyle = nil;
-        
         self.statusToastStyle = nil;
-        
-        // default notifications style toast
-        self.toastType = CRToastTypeNavigationBar;
-        self.toastPresentationType = CRToastPresentationTypeCover;
-        self.toastTextAlignment = NSTextAlignmentCenter;
-        self.toastAnimationInType = CRToastAnimationTypeGravity;
-        self.toastAnimationOutType = CRToastAnimationTypeGravity;
-        self.toastAnimationInDirection = CRToastAnimationDirectionTop;
-        self.toastAnimationOutDirection = CRToastAnimationDirectionTop;
-        self.toastFont = [UIFont systemFontOfSize:16];
-        self.toastTextColor = [UIColor whiteColor];
-        self.toastBackgroundColor = [UIColor orangeColor];
-        
-        // apply the appearance
-        [[[self class] appearance] applyInvocationTo:self];
+        self.notificationToastStyle = nil;
     }
     return self;
 }
 
 #pragma mark - appearance
 
-+ (id)appearance {
-    return [MZAppearance appearanceForClass:[self class]];
++ (instancetype)shareManager {
+    static dispatch_once_t onceToken;
+    static id sharedInstance = nil;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[BSToast alloc] init];
+    });
+    return sharedInstance;
 }
 
 
@@ -92,9 +82,7 @@ NSString *NSStringFromLLToastPosition(BSToastPosition position) {
         UINavigationController *navi = (UINavigationController *)currentViewController;
         [navi showToast:message style:self.statusToastStyle];
     } else {
-        if (![CRToastManager isShowingNotification]) {
-            [CRToastManager showNotificationWithOptions:[BSToast buildOptions:self withMessage:message] completionBlock:nil];
-        }
+        [ISMessages showISMessageToastWithTitle:nil message:message alertType:ISAlertTypeInfo style:nil];
     }
 }
 
@@ -112,15 +100,17 @@ NSString *NSStringFromLLToastPosition(BSToastPosition position) {
             UINavigationController *navi = tab.selectedViewController;
             [navi showToast:message style:toast.statusToastStyle];
         } else {
-            if (![CRToastManager isShowingNotification]) {
-                [CRToastManager showNotificationWithOptions:[BSToast buildOptions:toast withMessage:message] completionBlock:nil];
-            }
+            [ISMessages showISMessageToastWithTitle:nil
+                                            message:message
+                                          alertType:ISAlertTypeInfo
+                                              style:nil];
         }
     }
     else {
-        if (![CRToastManager isShowingNotification]) {
-            [CRToastManager showNotificationWithOptions:[BSToast buildOptions:toast withMessage:message] completionBlock:nil];
-        }
+        [ISMessages showISMessageToastWithTitle:nil
+                                        message:message
+                                      alertType:ISAlertTypeInfo
+                                          style:nil];
     }
 }
 
@@ -128,45 +118,39 @@ NSString *NSStringFromLLToastPosition(BSToastPosition position) {
 
 #pragma mark - Notification style
 
-+ (instancetype)shareManager {
-    static dispatch_once_t onceToken;
-    static id sharedInstance = nil;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[BSToast alloc] init];
-    });
-    return sharedInstance;
++ (void)showInfoToast:(NSString *)message {
+    [BSToast showToastWithTitle:nil
+                        message:message
+                      alertType:ISAlertTypeInfo];
 }
 
-+ (void)showToastNotificationStyle:(NSString *)message {
++ (void)showWarningToast:(NSString *)message {
+    [BSToast showToastWithTitle:nil
+                        message:message
+                      alertType:ISAlertTypeWarning];
+}
+
++ (void)showErrorToast:(NSString *)message {
+    [BSToast showToastWithTitle:nil
+                        message:message
+                      alertType:ISAlertTypeError];
+}
+
++ (void)showSuccessToast:(NSString *)message {
+    [BSToast showToastWithTitle:nil
+                        message:message
+                      alertType:ISAlertTypeSuccess];
+}
+
++ (void)showToastWithTitle:(NSString *)title
+                   message:(NSString *)message
+                 alertType:(ISAlertType)type {
     BSToast *toast = [BSToast shareManager];
-    if (![CRToastManager isShowingNotification]) {
-        [CRToastManager showNotificationWithOptions:[BSToast buildOptions:toast withMessage:message] completionBlock:nil];
-    }
-    
-}
 
-- (void)showToastNotificationStyle:(NSString *)message {
-    [CRToastManager showNotificationWithOptions:[BSToast buildOptions:self withMessage:message] completionBlock:nil];
+    [ISMessages showISMessageToastWithTitle:title
+                                    message:message
+                                  alertType:type
+                                      style:toast.notificationToastStyle];
 }
-
-+ (NSMutableDictionary *)buildOptions:(BSToast *)toast withMessage:(NSString *)message {
-    NSMutableDictionary *options = [NSMutableDictionary new];
-    [options setObject:@(toast.toastType) forKey:kCRToastNotificationTypeKey];
-    [options setObject:@(toast.toastPresentationType) forKey:kCRToastNotificationPresentationTypeKey];
-    [options setObject:@(toast.toastTextAlignment) forKey:kCRToastTextAlignmentKey];
-    [options setObject:@(toast.toastDuration) forKey:kCRToastTimeIntervalKey];
-    [options setObject:toast.toastBackgroundColor forKey:kCRToastBackgroundColorKey];
-    [options setObject:@(toast.toastAnimationInType) forKey:kCRToastAnimationInTypeKey];
-    [options setObject:@(toast.toastAnimationOutType) forKey:kCRToastAnimationOutTypeKey];
-    [options setObject:@(toast.toastAnimationInDirection) forKey:kCRToastAnimationInDirectionKey];
-    [options setObject:@(toast.toastAnimationOutDirection) forKey:kCRToastAnimationOutDirectionKey];
-    [options setObject:toast.toastFont forKey:kCRToastFontKey];
-    [options setObject:toast.toastTextColor forKey:kCRToastTextColorKey];
-    
-    // append message
-    [options setObject:message forKey:kCRToastTextKey];
-    return options;
-}
-
 
 @end

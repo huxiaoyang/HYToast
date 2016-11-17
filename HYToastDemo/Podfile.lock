@@ -1,16 +1,24 @@
 PODS:
-  - CRToast (0.0.9)
-  - MZAppearance (1.1.6)
+  - ISMessages (1.0.2)
   - Toast (3.0)
 
 DEPENDENCIES:
-  - CRToast (~> 0.0.9)
-  - MZAppearance (= 1.1.6)
+  - ISMessages (from `https://github.com/huxiaoyang/ISMessages.git`)
   - Toast (~> 3.0)
 
+EXTERNAL SOURCES:
+  ISMessages:
+    :git: https://github.com/huxiaoyang/ISMessages.git
+
+CHECKOUT OPTIONS:
+  ISMessages:
+    :commit: e18861479843c7cfa007331b2efb3aa9881dffa7
+    :git: https://github.com/huxiaoyang/ISMessages.git
+
 SPEC CHECKSUMS:
-  CRToast: 5a78c22b921c5ed3487488af605bc403a9c92fed
-  MZAppearance: 0c06d3fa9cc55142f1da14bc8631fbe8fd6e19d5
+  ISMessages: b8c1f8df6229cff3e69d1c815a0736e75a200bfa
   Toast: 32c59229abfcf41850162b83bb9259dc84372473
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 8bd18923ebf8d50f9167355ac3974ed47883da63
+
+COCOAPODS: 1.1.1
