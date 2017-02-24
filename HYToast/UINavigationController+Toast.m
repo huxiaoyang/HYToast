@@ -101,6 +101,9 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
                         options:(UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
                          
+                         if (self.presentedViewController && ![self.presentedViewController isKindOfClass:[UINavigationController class]])
+                             return;
+                         
                          toast.frame = CGRectMake(0, BSNavigationBarHeight, [[UIScreen mainScreen] bounds].size.width, toast.statusToastStyle.toastHeight);
                          
                          if (self.presentedViewController) {
