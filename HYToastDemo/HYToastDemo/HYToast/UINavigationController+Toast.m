@@ -72,7 +72,7 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
 }
 
 - (void)bs_showRecursionToast {
-    if (self.topViewController.bs_isViewVisible) {
+    if (self.topViewController.bs_isViewDidAppear) {
         BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
         NSTimeInterval duration = [objc_getAssociatedObject(toast, &BSStatusToastDurationKey) doubleValue];
         [self bs_showToast:toast duration:duration];
@@ -83,7 +83,7 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
 
 - (void)bs_showPresentedRecursionToast {
     UINavigationController *Nav = (UINavigationController *)self.presentedViewController;
-    if ([Nav isKindOfClass:[UINavigationController class]] && Nav.topViewController.bs_isViewVisible) {
+    if ([Nav isKindOfClass:[UINavigationController class]] && Nav.topViewController.bs_isViewDidAppear) {
         BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
         NSTimeInterval duration = [objc_getAssociatedObject(toast, &BSStatusToastDurationKey) doubleValue];
         [self bs_showToast:toast duration:duration];
@@ -202,8 +202,30 @@ static const CGFloat BSNavigationBarHeight                = 64.0f;
 
 @implementation UIViewController (Toast)
 
-- (BOOL)bs_isViewVisible {
-    return (self.isViewLoaded && self.view.window);
++ (void)load {
+    static  dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        Class myClass = [self class];
+        SEL originSelector = @selector(viewDidAppear:);
+        SEL newSelector = @selector(bs_viewDidAppear:);
+        Method originM =class_getInstanceMethod(myClass, originSelector);
+        Method newM=class_getInstanceMethod(myClass, newSelector);
+        method_exchangeImplementations(originM, newM); // 方法调换
+    });
+}
+
+
+- (void)bs_viewDidAppear:(BOOL)animated {
+    self.bs_isViewDidAppear = YES;
+    [self bs_viewDidAppear:animated];
+}
+
+- (BOOL)bs_isViewDidAppear {
+    return [objc_getAssociatedObject(self, _cmd) doubleValue];
+}
+
+- (void)bs_setViewDidAppear:(BOOL)bs_isViewDidAppear {
+    objc_setAssociatedObject(self, @selector(bs_isViewDidAppear), @(bs_isViewDidAppear), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

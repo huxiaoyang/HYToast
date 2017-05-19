@@ -33,9 +33,9 @@
 @interface UIViewController (Toast)
 
 /**
- *  判断当前view是否初始化完成
+ *  判断当前view是否加载完毕
  */
-- (BOOL)bs_isViewVisible;
+@property (nonatomic, assign, setter=bs_setViewDidAppear:) BOOL bs_isViewDidAppear;
 
 @end
 
