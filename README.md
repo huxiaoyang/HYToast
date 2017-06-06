@@ -1,10 +1,10 @@
 # HYToast 
 
-###A toast with three style
+### A toast with three style
 
-![demo](https://github.com/huxiaoyang/HYToast/blob/master/Images/IMG_0106.gif)
+![demo](https://github.com/huxiaoyang/HYToast/blob/master/Images/toast.gif)
 
 
-#Installation
+# Installation
 **pod 'HYToast'**
 
