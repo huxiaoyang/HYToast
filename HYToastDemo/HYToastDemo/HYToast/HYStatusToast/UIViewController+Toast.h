@@ -21,16 +21,17 @@
 
 
 
-@interface UINavigationController (Toast)
+@interface UIViewController (Toast)
+
+- (void)showToast:(NSString *)message;
 
 - (void)showToast:(NSString *)message style:(BSStatusToastStyle *)style;
-
 
 @end
 
 
 
-@interface UIViewController (Toast)
+@interface UIViewController (Visible)
 
 /**
  *  判断当前view是否加载完毕

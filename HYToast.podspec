@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = 'HYToast'
   s.summary      = 'A toast with three style.'
-  s.version      = '1.0.4'
+  s.version      = '2.0.0'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.authors      = { 'huxiaoyang' => 'yohuyang@gmail.com' }
   s.homepage     = 'https://github.com/huxiaoyang/HYToast'
@@ -10,15 +10,18 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/huxiaoyang/HYToast.git', :tag => s.version.to_s }
 
   s.requires_arc = true
-  s.source_files = 'HYToast/**/*.{h,m}'
-  s.resource_bundles = {
-    'HYToast' => ['HYToast/Assets/*.png']
-  }
+ 
+  s.subspec 'All' do |ss|
+      ss.dependency 'HYToast/Notification'
+      ss.dependency 'HYToast/Status'
+    end
 
-  s.frameworks = 'UIKit', 'QuartzCore', 'Foundation'
-  s.module_name = 'HYToast'
+    s.subspec 'Notification' do |ss|
+      ss.source_files = 'HYToast/HYNotificationToast/*.{h,m}'
+    end
 
-  s.dependency "Toast", "~> 3.0"
-
+    s.subspec 'Status' do |ss|
+      ss.source_files = 'HYToast/HYStatusToast/*.{h,m}'
+    end
 
 end

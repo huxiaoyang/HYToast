@@ -5,6 +5,7 @@ inhibit_all_warnings!
 
 target 'HYToastDemo' do
     pod 'Toast', '~> 3.0'
+    pod 'BlocksKit'
 end
 
 post_install do |installer|
