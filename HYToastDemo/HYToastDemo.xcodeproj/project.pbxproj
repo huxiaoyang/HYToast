@@ -16,7 +16,7 @@
 		ED33EF201EE54C1600CCDA2F /* MessagesToast.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF1F1EE54C1500CCDA2F /* MessagesToast.m */; };
 		ED33EF4A1EE6932E00CCDA2F /* BSNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF441EE6932E00CCDA2F /* BSNotificationView.m */; };
 		ED33EF4B1EE6932E00CCDA2F /* UIView+BSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF461EE6932E00CCDA2F /* UIView+BSNotification.m */; };
-		ED33EF4C1EE6932E00CCDA2F /* UIViewController+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF491EE6932E00CCDA2F /* UIViewController+Toast.m */; };
+		ED33EF4F1EE6A42100CCDA2F /* UIViewController+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF4E1EE6A42100CCDA2F /* UIViewController+Toast.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,8 +38,8 @@
 		ED33EF441EE6932E00CCDA2F /* BSNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSNotificationView.m; sourceTree = "<group>"; };
 		ED33EF451EE6932E00CCDA2F /* UIView+BSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BSNotification.h"; sourceTree = "<group>"; };
 		ED33EF461EE6932E00CCDA2F /* UIView+BSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BSNotification.m"; sourceTree = "<group>"; };
-		ED33EF481EE6932E00CCDA2F /* UIViewController+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Toast.h"; sourceTree = "<group>"; };
-		ED33EF491EE6932E00CCDA2F /* UIViewController+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Toast.m"; sourceTree = "<group>"; };
+		ED33EF4D1EE6A42100CCDA2F /* UIViewController+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Toast.h"; sourceTree = "<group>"; };
+		ED33EF4E1EE6A42100CCDA2F /* UIViewController+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Toast.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,8 +138,8 @@
 		ED33EF471EE6932E00CCDA2F /* HYStatusToast */ = {
 			isa = PBXGroup;
 			children = (
-				ED33EF481EE6932E00CCDA2F /* UIViewController+Toast.h */,
-				ED33EF491EE6932E00CCDA2F /* UIViewController+Toast.m */,
+				ED33EF4D1EE6A42100CCDA2F /* UIViewController+Toast.h */,
+				ED33EF4E1EE6A42100CCDA2F /* UIViewController+Toast.m */,
 			);
 			path = HYStatusToast;
 			sourceTree = "<group>";
@@ -267,10 +267,10 @@
 				ED33EF201EE54C1600CCDA2F /* MessagesToast.m in Sources */,
 				ED042C341D18EE43008D003F /* ViewController.m in Sources */,
 				ED33EF4B1EE6932E00CCDA2F /* UIView+BSNotification.m in Sources */,
-				ED33EF4C1EE6932E00CCDA2F /* UIViewController+Toast.m in Sources */,
 				ED042C311D18EE43008D003F /* AppDelegate.m in Sources */,
 				ED042C2E1D18EE43008D003F /* main.m in Sources */,
 				ED33EF4A1EE6932E00CCDA2F /* BSNotificationView.m in Sources */,
+				ED33EF4F1EE6A42100CCDA2F /* UIViewController+Toast.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,8 +6,7 @@
 //  Copyright © 2016年 Xiao Yang. All rights reserved.
 //
 
-#import "UINavigationController+Toast.h"
-#import "UIView+BSKit.h"
+#import "UIViewController+Toast.h"
 #import <objc/runtime.h>
 
 
@@ -41,7 +40,11 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 
 
-@implementation UINavigationController (Toast)
+@implementation UIViewController (Toast)
+
+- (void)showToast:(NSString *)message {
+    [self showToast:message style:[[BSStatusToastStyle alloc] initWithStatusToastDefaultStyle]];
+}
 
 - (void)showToast:(NSString *)message style:(BSStatusToastStyle *)style {
     BSToastLabel *toast = [self toastViewForMessage:message style:style];
@@ -86,10 +89,10 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
             toast.originY = 0;
         }
     } else {
-        toast.targetController = self.topViewController;
+        toast.targetController = self;
         // 判断当前页面是否显式的存在navigationBar，如果navigationBar隐藏了，y<0
-        if (self.topViewController.navigationController.navigationBar.frame.origin.y > 0) {
-            CGFloat barHeight = self.topViewController.navigationController.navigationBar.frame.origin.y + self.topViewController.navigationController.navigationBar.frame.size.height;
+        if (self.navigationController.navigationBar.frame.origin.y > 0) {
+            CGFloat barHeight = self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height;
             toast.originY = barHeight;
         } else {
             toast.originY = 0;
@@ -141,7 +144,8 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction
                      animations:^{
                          toast.frame = CGRectMake(0, Y, [[UIScreen mainScreen] bounds].size.width, toast.statusToastStyle.toastHeight);
-                         if (view.topValue != toast.statusToastStyle.toastHeight && view.topValue != toast.statusToastStyle.toastHeight+Y) {
+                         if (view.frame.origin.y != toast.statusToastStyle.toastHeight &&
+                             view.frame.origin.y != toast.statusToastStyle.toastHeight+Y) {
                              [view setTransform:CGAffineTransformTranslate(view.transform, 0, toast.statusToastStyle.toastHeight)];
                          }
                      } completion:^(BOOL finished) {
@@ -173,8 +177,8 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
                          
                          toast.frame = CGRectMake(0, toast.originY, [[UIScreen mainScreen] bounds].size.width, 0);
                          UIView *displayView = toast.targetController.view;
-                         if (displayView.topValue == toast.statusToastStyle.toastHeight ||
-                             displayView.topValue == toast.statusToastStyle.toastHeight + toast.originY) {
+                         if (displayView.frame.origin.y == toast.statusToastStyle.toastHeight ||
+                             displayView.frame.origin.y == toast.statusToastStyle.toastHeight + toast.originY) {
                              [displayView setTransform:CGAffineTransformTranslate(displayView.transform, 0, -toast.statusToastStyle.toastHeight)];
                          }
                          
@@ -245,7 +249,7 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 
 
-@implementation UIViewController (Toast)
+@implementation UIViewController (Visible)
 
 + (void)load {
     static  dispatch_once_t onceToken;
