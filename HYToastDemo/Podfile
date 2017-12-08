@@ -4,7 +4,7 @@ platform :ios, '8.0'
 inhibit_all_warnings!
 
 target 'HYToastDemo' do
-    pod 'Toast', '~> 3.0'
+    pod 'Toast'
     pod 'BlocksKit'
 end
 

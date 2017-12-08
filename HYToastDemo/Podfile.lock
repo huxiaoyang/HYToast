@@ -14,16 +14,16 @@ PODS:
   - BlocksKit/UIKit (2.2.5):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
-  - Toast (3.0)
+  - Toast (4.0.0)
 
 DEPENDENCIES:
   - BlocksKit
-  - Toast (~> 3.0)
+  - Toast
 
 SPEC CHECKSUMS:
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
-  Toast: 32c59229abfcf41850162b83bb9259dc84372473
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
 
-PODFILE CHECKSUM: e245cc1072fa5548297558db152327a06d1958e6
+PODFILE CHECKSUM: dc7cf9bb8085cdd60e0406e222b779e11bd37f6d
 
-COCOAPODS: 1.2.0.beta.1
+COCOAPODS: 1.3.1

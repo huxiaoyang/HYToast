@@ -128,7 +128,16 @@
 
     [button bk_addEventHandler:^(id sender) {
         
-        [VC showToast:@"newVC"];
+        if ([[UIScreen mainScreen] bounds].size.height == 812.f && !VC.navigationController) {
+#if DEBUG
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"抱歉" message:@"当前toast的动画设计，不支持没有NavigationBar的iPhoneX，也不准备适配它，如果想要使用，请为你的Controller添加NavigationBar或者使用另外一种样式" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:action];
+            [VC presentViewController:alert animated:YES completion:nil];
+#endif
+        } else {
+            [VC showToast:@"newVC"];
+        }
         
     } forControlEvents:UIControlEventTouchUpInside];
     
@@ -137,7 +146,8 @@
     [back setTitle:@"back" forState:UIControlStateNormal];
     [back setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [back setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
-    back.frame = CGRectMake(20, 20, 50, 30);
+    CGFloat top = ([[UIScreen mainScreen] bounds].size.height == 812.f) ? 40 : 20;
+    back.frame = CGRectMake(20, top, 50, 30);
     [VC.view addSubview:back];
 
     [back bk_addEventHandler:^(id sender) {

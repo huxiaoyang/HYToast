@@ -38,7 +38,9 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
 - (void)setup {
     self.animationDuration = 0.3f;
     self.hideStautsBarWhenShowAnimation = YES;
-    self.edgeInsets = UIEdgeInsetsMake(10, 10, 0, 10);
+    CGFloat left = 10.f;
+    CGFloat top = ([[UIScreen mainScreen] bounds].size.height == 812.f) ? 40.f : 10.f;
+    self.edgeInsets = UIEdgeInsetsMake(top, left, 0, left);
     self.showAnimation = [self showToastAnimation];
     self.hideAnimation = [self hideToastAnimation];
 }
