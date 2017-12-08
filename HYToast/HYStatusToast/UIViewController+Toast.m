@@ -130,6 +130,9 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 // 展示toast动画
 - (void)bs_showToast:(BSToastLabel *)toast duration:(NSTimeInterval)duration originY:(CGFloat)Y targetView:(UIView *)view {
+    if ([[UIScreen mainScreen] bounds].size.height == 812.f && Y == 0) {
+        return;
+    }
     [view.superview addSubview:toast];
     [view.superview bringSubviewToFront:toast];
     // 页面没有navigationBar的情况，展示toast时隐藏状态栏，防止遮挡
