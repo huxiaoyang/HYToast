@@ -1,12 +1,12 @@
 //
-//  UIView+BSNotification.m
-//  HYToastDemo
+//  UIViewController+BSNotification.m
+//  void_toast
 //
 //  Created by ucredit-XiaoYang on 2017/6/5.
 //  Copyright © 2017年 XiaoYang. All rights reserved.
 //
 
-#import "UIView+BSNotification.h"
+#import "UIWindow+BSNotification.h"
 #import "BSNotificationView.h"
 #import <objc/runtime.h>
 
@@ -18,17 +18,17 @@ static const void * BSNotificationTimerKey        = @"com.XiaoYang.BSNotificatio
 static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificationDurtionKey";
 
 
-@implementation UIView (BSNotification)
+@implementation UIWindow (BSNotification)
 
-- (void)makeNotification:(BSNotificationView *)notification
-                duration:(NSTimeInterval)duration {
-    [self makeNotification:notification duration:duration complate:nil];
+- (void)bs_makeNotification:(BSNotificationView *)notification
+                   duration:(NSTimeInterval)duration {
+    [self bs_makeNotification:notification duration:duration complate:nil];
 }
 
 
-- (void)makeNotification:(BSNotificationView *)notification
-                duration:(NSTimeInterval)duration
-                complate:(BSNotificationCompletionBlock)block {
+- (void)bs_makeNotification:(BSNotificationView *)notification
+                   duration:(NSTimeInterval)duration
+                   complate:(BSNotificationCompletionBlock)block {
     
     objc_setAssociatedObject(notification, &BSNotificationDurtionKey, @(duration), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
@@ -54,7 +54,6 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
         NSTimeInterval duration = [objc_getAssociatedObject(notification, &BSNotificationDurtionKey) doubleValue];
         
         if (finish) {
-            
             NSTimer *timer = [NSTimer timerWithTimeInterval:duration
                                                      target:self
                                                    selector:@selector(pr_notificationTimerDidFinish:)
@@ -64,10 +63,10 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
             
             objc_setAssociatedObject(notification, &BSNotificationTimerKey, timer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pr_notificationGestureRecognizer:)];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pr_notificationTapGestureRecognizer:)];
             [notification addGestureRecognizer:tap];
             
-            UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(pr_notificationGestureRecognizer:)];
+            UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(pr_notificationSwipeGestureRecognizer:)];
             swipe.direction = UISwipeGestureRecognizerDirectionUp | UISwipeGestureRecognizerDirectionDown;
             [notification addGestureRecognizer:swipe];
             
@@ -81,8 +80,6 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
 // timer执行事件
 - (void)pr_notificationTimerDidFinish:(NSTimer *)timer {
     BSNotificationView *notification = timer.userInfo;
-    // 在timer时间到达弹出动画开始执行时，禁止notification的点击事件
-    notification.userInteractionEnabled = NO;
     
     NSTimeInterval duration = [objc_getAssociatedObject(notification, &BSNotificationDurtionKey) doubleValue];
     
@@ -108,14 +105,23 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
 }
 
 // 点击事件
-- (void)pr_notificationGestureRecognizer:(UIGestureRecognizer *)gesture {
+- (void)pr_notificationTapGestureRecognizer:(UIGestureRecognizer *)gesture {
     BSNotificationView *notification = (BSNotificationView *)gesture.view;
     
     if (notification.actionBlock) {
         notification.actionBlock(notification);
     }
     
+    [self pr_notificationSwipeGestureRecognizer:gesture];
+}
+
+// 滑动事件
+- (void)pr_notificationSwipeGestureRecognizer:(UIGestureRecognizer *)gesture {
+    BSNotificationView *notification = (BSNotificationView *)gesture.view;
+
     NSTimer *timer = objc_getAssociatedObject(notification, &BSNotificationTimerKey);
+    NSTimeInterval current = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval endTimer = [timer.fireDate timeIntervalSince1970];
     [timer invalidate];
     
     [notification hideWithBlock:^(BSNotificationView *view, BOOL finish) {
@@ -125,6 +131,9 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
         }
         
     }];
+    
+    if (current > endTimer)
+        return;
     
     if (self.pr_notificationQueue.count > 0) {
         [self pr_showNextNotification];

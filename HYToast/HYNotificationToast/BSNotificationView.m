@@ -1,12 +1,15 @@
 //
 //  BSNotificationView.m
-//  HYToastDemo
+//  void_toast
 //
 //  Created by ucredit-XiaoYang on 2017/6/5.
 //  Copyright © 2017年 XiaoYang. All rights reserved.
 //
 
 #import "BSNotificationView.h"
+#import "BSNotificationWindow.h"
+#import <AudioToolbox/AudioToolbox.h>
+
 
 #define NotificationWeakify(o)        __weak   typeof(self) mmwo = o;
 #define NotificationStrongify(o)      __strong typeof(self) o = mmwo;
@@ -21,6 +24,8 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
 
 @property (nonatomic, copy) BSNotificationCompletionBlock tmpShowCompletionBlock;
 @property (nonatomic, copy) BSNotificationCompletionBlock tmpHideCompletionBlock;
+
+@property (nonatomic, strong) UIImpactFeedbackGenerator *generator;
 
 @end
 
@@ -38,6 +43,7 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
 - (void)setup {
     self.animationDuration = 0.3f;
     self.hideStautsBarWhenShowAnimation = YES;
+    self.impactFeedbackWhenShowAnimation = YES;
     CGFloat left = 10.f;
     CGFloat top = ([[UIScreen mainScreen] bounds].size.height == 812.f) ? 40.f : 10.f;
     self.edgeInsets = UIEdgeInsetsMake(top, left, 0, left);
@@ -59,6 +65,9 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
     if (block) {
         self.tmpShowCompletionBlock = block;
     }
+    
+    [[BSNotificationWindow sharedWindow] setHidden:NO];
+    [[BSNotificationWindow sharedWindow] makeKeyAndVisible];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -95,7 +104,11 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
             statusBar.hidden = YES;
         }
         
-        [[[UIApplication sharedApplication] keyWindow] addSubview:self];
+        if (self.impactFeedbackWhenShowAnimation) {
+            AudioServicesPlaySystemSound(1519);
+        }
+        
+        [[[BSNotificationWindow sharedWindow] attachView] addSubview:self];
         self.frame = [self setupHideNotificationViewFrame];
         
         [UIView animateWithDuration:self.animationDuration
@@ -153,6 +166,9 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
                                  statusBar.hidden = NO;
                              }
                              
+                             [[BSNotificationWindow sharedWindow] setHidden:YES];
+                             [[[[UIApplication sharedApplication] delegate] window] makeKeyAndVisible];
+                             
                          }];
         
     };
@@ -160,8 +176,19 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
     return block;
 }
 
+#pragma mark - setter
+
+- (void)setHideStautsBarWhenShowAnimation:(BOOL)hideStautsBarWhenShowAnimation {
+    if ([[UIScreen mainScreen] bounds].size.height == 812.f) {
+        _hideStautsBarWhenShowAnimation = NO;
+        return;
+    }
+    _hideStautsBarWhenShowAnimation = hideStautsBarWhenShowAnimation;
+}
+
 
 #pragma mark - 设置frame变化
+
 - (CGRect)setupHideNotificationViewFrame {
     CGRect rect;
     CGFloat screenW = UIScreen.mainScreen.bounds.size.width;

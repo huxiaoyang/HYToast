@@ -1,6 +1,6 @@
 //
-//  UINavigationController+Toast.h
-//  BSKit
+//  UIViewController+BSToast.h
+//  void_toast
 //
 //  Created by ucredit-XiaoYang on 16/4/25.
 //  Copyright © 2016年 Xiao Yang. All rights reserved.
@@ -21,17 +21,20 @@
 
 
 
-@interface UIViewController (Toast)
+@interface UIViewController (BSToast)
 
-- (void)showToast:(NSString *)message;
++ (BOOL)pr_isIphoneX;
 
-- (void)showToast:(NSString *)message style:(BSStatusToastStyle *)style;
+- (void)bs_showToast:(NSString *)message;
+
+- (void)bs_showToast:(NSString *)message
+               style:(BSStatusToastStyle *)style;
 
 @end
 
 
 
-@interface UIViewController (Visible)
+@interface UIViewController (BSVisible)
 
 /**
  *  判断当前view是否加载完毕
@@ -42,6 +45,11 @@
 
 
 
+typedef NS_ENUM(NSUInteger, BSStatusToastAnimationStyle) {
+    BSStatusToastAnimationFollow,
+    BSStatusToastAnimationCover,
+};
+
 @interface BSStatusToastStyle : NSObject
 
 /**
@@ -49,6 +57,12 @@
  */
 @property (nonatomic, assign) NSTimeInterval duration;
 
+/**
+ *  Toast动画类型
+ *  follow - 当前视图跟随下滑
+ *  cover - 覆盖当前视图下滑
+ */
+@property (nonatomic, assign) BSStatusToastAnimationStyle animationStyle;
 
 /**
  *   The background color. Default is `[UIColor orangeColor]`.

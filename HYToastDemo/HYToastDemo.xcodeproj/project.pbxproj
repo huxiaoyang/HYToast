@@ -7,22 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6161036766D362929DB86677 /* libPods-HYToastDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E585E3A261DD6DE9B6DEB2A /* libPods-HYToastDemo.a */; };
+		043FC26D20AA7855006CE52B /* BSNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FC26720AA7855006CE52B /* BSNotificationView.m */; };
+		043FC27420AA7944006CE52B /* UIWindow+BSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FC27020AA7943006CE52B /* UIWindow+BSNotification.m */; };
+		043FC27520AA7944006CE52B /* BSNotificationWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FC27120AA7944006CE52B /* BSNotificationWindow.m */; };
+		043FC27A20AA794F006CE52B /* BSStatusToastManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FC27820AA794F006CE52B /* BSStatusToastManager.m */; };
+		043FC27B20AA794F006CE52B /* UIViewController+BSToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 043FC27920AA794F006CE52B /* UIViewController+BSToast.m */; };
 		ED042C2E1D18EE43008D003F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ED042C2D1D18EE43008D003F /* main.m */; };
 		ED042C311D18EE43008D003F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ED042C301D18EE43008D003F /* AppDelegate.m */; };
 		ED042C341D18EE43008D003F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED042C331D18EE43008D003F /* ViewController.m */; };
 		ED042C391D18EE43008D003F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ED042C381D18EE43008D003F /* Assets.xcassets */; };
 		ED042C3C1D18EE43008D003F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED042C3A1D18EE43008D003F /* LaunchScreen.storyboard */; };
 		ED33EF201EE54C1600CCDA2F /* MessagesToast.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF1F1EE54C1500CCDA2F /* MessagesToast.m */; };
-		ED33EF4A1EE6932E00CCDA2F /* BSNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF441EE6932E00CCDA2F /* BSNotificationView.m */; };
-		ED33EF4B1EE6932E00CCDA2F /* UIView+BSNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF461EE6932E00CCDA2F /* UIView+BSNotification.m */; };
-		ED33EF4F1EE6A42100CCDA2F /* UIViewController+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = ED33EF4E1EE6A42100CCDA2F /* UIViewController+Toast.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5E71B7927AE49B32F83F35FB /* Pods-HYToastDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HYToastDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-HYToastDemo/Pods-HYToastDemo.release.xcconfig"; sourceTree = "<group>"; };
-		7E2D58585D7D3791F36EABA2 /* Pods-HYToastDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HYToastDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HYToastDemo/Pods-HYToastDemo.debug.xcconfig"; sourceTree = "<group>"; };
-		8E585E3A261DD6DE9B6DEB2A /* libPods-HYToastDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HYToastDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		043FC26720AA7855006CE52B /* BSNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSNotificationView.m; sourceTree = "<group>"; };
+		043FC26920AA7855006CE52B /* BSNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSNotificationView.h; sourceTree = "<group>"; };
+		043FC27020AA7943006CE52B /* UIWindow+BSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+BSNotification.m"; sourceTree = "<group>"; };
+		043FC27120AA7944006CE52B /* BSNotificationWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSNotificationWindow.m; sourceTree = "<group>"; };
+		043FC27220AA7944006CE52B /* UIWindow+BSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+BSNotification.h"; sourceTree = "<group>"; };
+		043FC27320AA7944006CE52B /* BSNotificationWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSNotificationWindow.h; sourceTree = "<group>"; };
+		043FC27620AA794F006CE52B /* UIViewController+BSToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+BSToast.h"; sourceTree = "<group>"; };
+		043FC27720AA794F006CE52B /* BSStatusToastManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSStatusToastManager.h; sourceTree = "<group>"; };
+		043FC27820AA794F006CE52B /* BSStatusToastManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSStatusToastManager.m; sourceTree = "<group>"; };
+		043FC27920AA794F006CE52B /* UIViewController+BSToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+BSToast.m"; sourceTree = "<group>"; };
 		ED042C291D18EE43008D003F /* HYToastDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HYToastDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED042C2D1D18EE43008D003F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ED042C2F1D18EE43008D003F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -34,12 +42,6 @@
 		ED042C3D1D18EE43008D003F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED33EF1E1EE54C1500CCDA2F /* MessagesToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessagesToast.h; sourceTree = "<group>"; };
 		ED33EF1F1EE54C1500CCDA2F /* MessagesToast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessagesToast.m; sourceTree = "<group>"; };
-		ED33EF431EE6932E00CCDA2F /* BSNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSNotificationView.h; sourceTree = "<group>"; };
-		ED33EF441EE6932E00CCDA2F /* BSNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSNotificationView.m; sourceTree = "<group>"; };
-		ED33EF451EE6932E00CCDA2F /* UIView+BSNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BSNotification.h"; sourceTree = "<group>"; };
-		ED33EF461EE6932E00CCDA2F /* UIView+BSNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+BSNotification.m"; sourceTree = "<group>"; };
-		ED33EF4D1EE6A42100CCDA2F /* UIViewController+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Toast.h"; sourceTree = "<group>"; };
-		ED33EF4E1EE6A42100CCDA2F /* UIViewController+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Toast.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,36 +49,59 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6161036766D362929DB86677 /* libPods-HYToastDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		043FC26420AA7855006CE52B /* HYToast */ = {
+			isa = PBXGroup;
+			children = (
+				043FC26520AA7855006CE52B /* HYNotificationToast */,
+				043FC26A20AA7855006CE52B /* HYStatusToast */,
+			);
+			name = HYToast;
+			path = ../HYToast;
+			sourceTree = "<group>";
+		};
+		043FC26520AA7855006CE52B /* HYNotificationToast */ = {
+			isa = PBXGroup;
+			children = (
+				043FC27320AA7944006CE52B /* BSNotificationWindow.h */,
+				043FC27120AA7944006CE52B /* BSNotificationWindow.m */,
+				043FC27220AA7944006CE52B /* UIWindow+BSNotification.h */,
+				043FC27020AA7943006CE52B /* UIWindow+BSNotification.m */,
+				043FC26920AA7855006CE52B /* BSNotificationView.h */,
+				043FC26720AA7855006CE52B /* BSNotificationView.m */,
+			);
+			path = HYNotificationToast;
+			sourceTree = "<group>";
+		};
+		043FC26A20AA7855006CE52B /* HYStatusToast */ = {
+			isa = PBXGroup;
+			children = (
+				043FC27720AA794F006CE52B /* BSStatusToastManager.h */,
+				043FC27820AA794F006CE52B /* BSStatusToastManager.m */,
+				043FC27620AA794F006CE52B /* UIViewController+BSToast.h */,
+				043FC27920AA794F006CE52B /* UIViewController+BSToast.m */,
+			);
+			path = HYStatusToast;
+			sourceTree = "<group>";
+		};
 		7EA5D2550D1AD17E5353AE4C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8E585E3A261DD6DE9B6DEB2A /* libPods-HYToastDemo.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		9BB40E09F4C1181DE3857931 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7E2D58585D7D3791F36EABA2 /* Pods-HYToastDemo.debug.xcconfig */,
-				5E71B7927AE49B32F83F35FB /* Pods-HYToastDemo.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		ED042C201D18EE43008D003F = {
 			isa = PBXGroup;
 			children = (
+				043FC26420AA7855006CE52B /* HYToast */,
 				ED042C2B1D18EE43008D003F /* HYToastDemo */,
 				ED042C2A1D18EE43008D003F /* Products */,
-				9BB40E09F4C1181DE3857931 /* Pods */,
 				7EA5D2550D1AD17E5353AE4C /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -92,7 +117,6 @@
 		ED042C2B1D18EE43008D003F /* HYToastDemo */ = {
 			isa = PBXGroup;
 			children = (
-				ED33EF411EE6932E00CCDA2F /* HYToast */,
 				ED042C2F1D18EE43008D003F /* AppDelegate.h */,
 				ED042C301D18EE43008D003F /* AppDelegate.m */,
 				ED042C321D18EE43008D003F /* ViewController.h */,
@@ -115,35 +139,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		ED33EF411EE6932E00CCDA2F /* HYToast */ = {
-			isa = PBXGroup;
-			children = (
-				ED33EF421EE6932E00CCDA2F /* HYNotificationToast */,
-				ED33EF471EE6932E00CCDA2F /* HYStatusToast */,
-			);
-			path = HYToast;
-			sourceTree = "<group>";
-		};
-		ED33EF421EE6932E00CCDA2F /* HYNotificationToast */ = {
-			isa = PBXGroup;
-			children = (
-				ED33EF431EE6932E00CCDA2F /* BSNotificationView.h */,
-				ED33EF441EE6932E00CCDA2F /* BSNotificationView.m */,
-				ED33EF451EE6932E00CCDA2F /* UIView+BSNotification.h */,
-				ED33EF461EE6932E00CCDA2F /* UIView+BSNotification.m */,
-			);
-			path = HYNotificationToast;
-			sourceTree = "<group>";
-		};
-		ED33EF471EE6932E00CCDA2F /* HYStatusToast */ = {
-			isa = PBXGroup;
-			children = (
-				ED33EF4D1EE6A42100CCDA2F /* UIViewController+Toast.h */,
-				ED33EF4E1EE6A42100CCDA2F /* UIViewController+Toast.m */,
-			);
-			path = HYStatusToast;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -155,8 +150,6 @@
 				ED042C251D18EE43008D003F /* Sources */,
 				ED042C261D18EE43008D003F /* Frameworks */,
 				ED042C271D18EE43008D003F /* Resources */,
-				77D5F7335778B03BEDB84042 /* [CP] Embed Pods Frameworks */,
-				B8E1DDE45D76A00270D44536 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -228,37 +221,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		77D5F7335778B03BEDB84042 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HYToastDemo/Pods-HYToastDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B8E1DDE45D76A00270D44536 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-HYToastDemo/Pods-HYToastDemo-resources.sh\"\n";
+			shellScript = "";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -268,13 +231,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				043FC27A20AA794F006CE52B /* BSStatusToastManager.m in Sources */,
 				ED33EF201EE54C1600CCDA2F /* MessagesToast.m in Sources */,
 				ED042C341D18EE43008D003F /* ViewController.m in Sources */,
-				ED33EF4B1EE6932E00CCDA2F /* UIView+BSNotification.m in Sources */,
 				ED042C311D18EE43008D003F /* AppDelegate.m in Sources */,
 				ED042C2E1D18EE43008D003F /* main.m in Sources */,
-				ED33EF4A1EE6932E00CCDA2F /* BSNotificationView.m in Sources */,
-				ED33EF4F1EE6A42100CCDA2F /* UIViewController+Toast.m in Sources */,
+				043FC26D20AA7855006CE52B /* BSNotificationView.m in Sources */,
+				043FC27520AA7944006CE52B /* BSNotificationWindow.m in Sources */,
+				043FC27420AA7944006CE52B /* UIWindow+BSNotification.m in Sources */,
+				043FC27B20AA794F006CE52B /* UIViewController+BSToast.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +347,6 @@
 		};
 		ED042C411D18EE43008D003F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E2D58585D7D3791F36EABA2 /* Pods-HYToastDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 87N2AEHWHH;
@@ -396,7 +360,6 @@
 		};
 		ED042C421D18EE43008D003F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5E71B7927AE49B32F83F35FB /* Pods-HYToastDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 87N2AEHWHH;

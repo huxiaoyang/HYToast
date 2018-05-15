@@ -1,14 +1,14 @@
 //
-//  UINavigationController+Toast.m
-//  BSKit
+//  UIViewController+BSToast.m
+//  void_toast
 //
 //  Created by ucredit-XiaoYang on 16/4/25.
 //  Copyright © 2016年 Xiao Yang. All rights reserved.
 //
 
-#import "UIViewController+Toast.h"
+#import "UIViewController+BSToast.h"
 #import <objc/runtime.h>
-
+#import <Foundation/Foundation.h>
 
 static const void * BSStatusToastDurationKey          = @"com.XiaoYang.BSStatusToastDurationKey";
 
@@ -33,6 +33,9 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 - (void)drawTextInRect:(CGRect)rect {
     UIEdgeInsets insets = {0, 10, 0, 10};
+    if ([UIViewController pr_isIphoneX] && self.frame.origin.y == 0) {
+        insets = UIEdgeInsetsMake(24, 10, 0, 10);
+    }
     [super drawTextInRect:UIEdgeInsetsInsetRect(rect, insets)];
 }
 
@@ -40,14 +43,16 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 
 
-@implementation UIViewController (Toast)
+@implementation UIViewController (BSToast)
 
-- (void)showToast:(NSString *)message {
-    [self showToast:message style:[[BSStatusToastStyle alloc] initWithStatusToastDefaultStyle]];
+- (void)bs_showToast:(NSString *)message {
+    [self bs_showToast:message style:nil];
 }
 
-- (void)showToast:(NSString *)message style:(BSStatusToastStyle *)style {
-    BSToastLabel *toast = [self toastViewForMessage:message style:style];
+- (void)bs_showToast:(NSString *)message style:(BSStatusToastStyle *)style {
+    if (!message || ![message stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length) return;
+    BSStatusToastStyle *sty = style ?: [[BSStatusToastStyle alloc] initWithStatusToastDefaultStyle];
+    BSToastLabel *toast = [self toastViewForMessage:message style:sty];
     [self showToast:toast duration:toast.statusToastStyle.duration];
 }
 
@@ -74,6 +79,14 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 #pragma mark - private method
 - (void)pr_jadgeToastTargetController:(BSToastLabel *)toast {
+    
+    if (!self.bs_isViewDidAppear) {
+        [self performSelector:@selector(pr_jadgeToastTargetController:)
+                   withObject:toast
+                   afterDelay:0.15];
+        return;
+    }
+    
     if (self.presentedViewController) {
         if ([self.presentedViewController isKindOfClass:[UINavigationController class]]) {
             UINavigationController *nav = (UINavigationController *)self.presentedViewController;
@@ -91,7 +104,7 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
     } else {
         toast.targetController = self;
         // 判断当前页面是否显式的存在navigationBar，如果navigationBar隐藏了，y<0
-        if (self.navigationController.navigationBar.frame.origin.y > 0) {
+        if (self.navigationController.navigationBar.frame.origin.y > 0 && !self.navigationController.navigationBar.hidden) {
             CGFloat barHeight = self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height;
             toast.originY = barHeight;
         } else {
@@ -115,13 +128,14 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
     BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
     NSTimeInterval duration = [objc_getAssociatedObject(toast, &BSStatusToastDurationKey) doubleValue];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self bs_showToast:toast
-                  duration:duration];
+        [self bs_showToastWithDuration:duration];
     });
 }
 
 
-- (void)bs_showToast:(BSToastLabel *)toast duration:(NSTimeInterval)duration {
+- (void)bs_showToastWithDuration:(NSTimeInterval)duration {
+    BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
+    if (!toast) return;
     [self bs_showToast:toast
               duration:duration
                originY:toast.originY
@@ -129,41 +143,57 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 }
 
 // 展示toast动画
-- (void)bs_showToast:(BSToastLabel *)toast duration:(NSTimeInterval)duration originY:(CGFloat)Y targetView:(UIView *)view {
-    if ([[UIScreen mainScreen] bounds].size.height == 812.f && Y == 0) {
-        return;
-    }
+- (void)bs_showToast:(BSToastLabel *)toast
+            duration:(NSTimeInterval)duration
+             originY:(CGFloat)Y
+          targetView:(UIView *)view {
+    
     [view.superview addSubview:toast];
     [view.superview bringSubviewToFront:toast];
+    
     // 页面没有navigationBar的情况，展示toast时隐藏状态栏，防止遮挡
-    if (Y == 0) {
+    if (![UIViewController pr_isIphoneX] && Y == 0) {
         UIView *statusBar = [[UIApplication sharedApplication] valueForKeyPath:@"statusBar"];
-        statusBar.hidden = YES;
+        statusBar.hidden = !toast.isHidden;
     }
+    
     toast.frame = CGRectMake(0, Y, [[UIScreen mainScreen] bounds].size.width, 0);
+    
+    // 确定toast高度
+    CGFloat toastHeight = toast.statusToastStyle.toastHeight;
+    if ([UIViewController pr_isIphoneX] && Y == 0) {
+        toastHeight += 30;
+    }
     
     [UIView animateWithDuration:BSStatusToastFadeDuration
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionAllowUserInteraction
                      animations:^{
-                         toast.frame = CGRectMake(0, Y, [[UIScreen mainScreen] bounds].size.width, toast.statusToastStyle.toastHeight);
-                         if (view.frame.origin.y != toast.statusToastStyle.toastHeight &&
-                             view.frame.origin.y != toast.statusToastStyle.toastHeight+Y) {
-                             [view setTransform:CGAffineTransformTranslate(view.transform, 0, toast.statusToastStyle.toastHeight)];
+                         
+                         toast.frame = CGRectMake(0, Y, [[UIScreen mainScreen] bounds].size.width, toastHeight);
+                         
+                         if (toast.statusToastStyle.animationStyle == BSStatusToastAnimationFollow) {
+                             if (view.frame.origin.y != toastHeight &&
+                                 view.frame.origin.y != (toastHeight + Y)) {
+                                 [view setTransform:CGAffineTransformTranslate(view.transform, 0, toastHeight)];
+                             }
                          }
+                         
                      } completion:^(BOOL finished) {
+                         
                          NSTimer *timer = [NSTimer timerWithTimeInterval:duration target:self selector:@selector(bs_toastTimerDidFinish:) userInfo:toast repeats:NO];
                          [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+                         
                      }];
 }
 
 // 每一个toast展示时间结束后回调，需判断当前缓存队列中是否还有需要展示的toast
-// 这里判断队列，展示动画效果【view不复原，接连弹出下一个toast，直到队列为空，view复原】
 - (void)bs_toastTimerDidFinish:(NSTimer *)timer {
     BSToastLabel *toast = (BSToastLabel *)timer.userInfo;
+    // 这里判断队列，展示动画效果【view不复原，接连弹出下一个toast，直到队列为空，view复原】
     if (self.bs_toastQueue.count > 0) {
         [self pr_showNextToast];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [toast removeFromSuperview];
         });
     } else {
@@ -173,21 +203,36 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 // 隐藏toast
 - (void)bs_hideToast:(BSToastLabel *)toast {
+    
+    // 确定toast高度
+    CGFloat toastHeight = toast.statusToastStyle.toastHeight;
+    if ([UIViewController pr_isIphoneX] && toast.originY == 0) {
+        toastHeight += 30;
+    }
+    
     [UIView animateWithDuration:BSStatusToastFadeDuration
                           delay:0.0
                         options:(UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState)
                      animations:^{
                          
                          toast.frame = CGRectMake(0, toast.originY, [[UIScreen mainScreen] bounds].size.width, 0);
-                         UIView *displayView = toast.targetController.view;
-                         if (displayView.frame.origin.y == toast.statusToastStyle.toastHeight ||
-                             displayView.frame.origin.y == toast.statusToastStyle.toastHeight + toast.originY) {
-                             [displayView setTransform:CGAffineTransformTranslate(displayView.transform, 0, -toast.statusToastStyle.toastHeight)];
+                         
+                         if (toast.statusToastStyle.animationStyle == BSStatusToastAnimationFollow) {
+                             
+                             UIView *displayView = toast.targetController.view;
+                             
+                             if (displayView.frame.origin.y == toastHeight ||
+                                 displayView.frame.origin.y == toastHeight + toast.originY) {
+                                 
+                                 [displayView setTransform:CGAffineTransformTranslate(displayView.transform, 0, -toastHeight)];
+                                 
+                             }
+                             
                          }
                          
                      } completion:^(BOOL finished) {
                          [toast removeFromSuperview];
-
+                         
                          // 这里判断队列，展示动画效果【view会随toast复原，然后接连弹出下一个toast，直到队列为空】
                          if ([self.bs_toastQueue count] > 0) {
                              [self pr_showNextToast];
@@ -208,12 +253,18 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
     BSToastLabel *nextToast = [[self bs_toastQueue] firstObject];
     [[self bs_toastQueue] removeObjectAtIndex:0];
     
+    // 更新当前绑定的Toast
+    objc_setAssociatedObject(self, &BSStatusToastActiveToastViewKey, nextToast, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
     // present the next toast 弹出toast
     NSTimeInterval duration = [objc_getAssociatedObject(nextToast, &BSStatusToastDurationKey) doubleValue];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self bs_showToast:nextToast duration:duration];
-    });
+    [self bs_showToastWithDuration:duration];
 }
+
++ (BOOL)pr_isIphoneX {
+    return [[UIScreen mainScreen] bounds].size.height == 812.f;
+}
+
 
 #pragma mark - Queue
 
@@ -252,7 +303,7 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 
 
-@implementation UIViewController (Visible)
+@implementation UIViewController (BSVisible)
 
 + (void)load {
     static  dispatch_once_t onceToken;
@@ -263,9 +314,20 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
         Method originM =class_getInstanceMethod(myClass, originSelector);
         Method newM=class_getInstanceMethod(myClass, newSelector);
         method_exchangeImplementations(originM, newM); // 方法调换
+        
+        SEL originDisappear = @selector(viewWillDisappear:);
+        SEL newDisappear = @selector(bs_viewWillDisappear:);
+        Method originDisappearMethod = class_getInstanceMethod(myClass, originDisappear);
+        Method newDisappearMethod = class_getInstanceMethod(myClass, newDisappear);
+        method_exchangeImplementations(originDisappearMethod, newDisappearMethod);
+        
+        SEL originAppear = @selector(viewWillAppear:);
+        SEL newAppear = @selector(bs_viewWillAppear:);
+        Method originAppearMethod = class_getInstanceMethod(myClass, originAppear);
+        Method newAppearMethod = class_getInstanceMethod(myClass, newAppear);
+        method_exchangeImplementations(originAppearMethod, newAppearMethod);
     });
 }
-
 
 - (void)bs_viewDidAppear:(BOOL)animated {
     self.bs_isViewDidAppear = YES;
@@ -278,6 +340,36 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 
 - (void)bs_setViewDidAppear:(BOOL)bs_isViewDidAppear {
     objc_setAssociatedObject(self, @selector(bs_isViewDidAppear), @(bs_isViewDidAppear), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)bs_viewWillDisappear:(BOOL)animated {
+    [self performSelectorOnMainThread:@selector(pr_setActiveToastHidden) withObject:nil waitUntilDone:YES];
+    [self bs_viewWillDisappear:animated];
+}
+
+- (void)bs_viewWillAppear:(BOOL)animated {
+    [self performSelectorOnMainThread:@selector(pr_setViewRecovery) withObject:nil waitUntilDone:YES];
+    [self bs_viewWillAppear:animated];
+}
+
+- (void)pr_setActiveToastHidden {
+    BSToastLabel *toast = objc_getAssociatedObject(self, &BSStatusToastActiveToastViewKey);
+    if (toast) {
+        NSMutableArray *bs_toastQueue = objc_getAssociatedObject(self, &BSStatusToastQueueKey);
+        [bs_toastQueue removeAllObjects];
+        toast.hidden = YES;
+        
+        CGRect rect;
+        rect.origin = CGPointMake(self.view.frame.origin.x, self.view.frame.origin.y - toast.statusToastStyle.toastHeight);
+        rect.size = self.view.frame.size;
+        self.view.frame = rect;
+    }
+}
+
+- (void)pr_setViewRecovery {
+    if (self.view.transform.ty > 0) {
+        [self.view setTransform:CGAffineTransformTranslate(self.view.transform, 0, -self.view.transform.ty)];
+    }
 }
 
 @end
@@ -294,6 +386,7 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
         self.messageFont = [UIFont systemFontOfSize:13];
         self.toastHeight = 25.0f;
         self.duration = 1.5;
+        self.animationStyle = BSStatusToastAnimationFollow;
         
     }
     return self;

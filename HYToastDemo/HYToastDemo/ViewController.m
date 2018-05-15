@@ -7,17 +7,18 @@
 //
 
 #import "ViewController.h"
+#import "UIWindow+BSNotification.h"
+#import "BSStatusToastManager.h"
 #import "MessagesToast.h"
-#import "UIView+BSNotification.h"
-#import "UIViewController+Toast.h"
-#import <Toast/UIView+Toast.h>
-#import <BlocksKit+UIKit.h>
 
 
 @interface ViewController ()
+
 @property (nonatomic, strong) MessagesToast *toast;
+@property (nonatomic, strong) UIViewController *presentVC;
 
 @end
+
 
 @implementation ViewController {
     NSArray *_items;
@@ -27,8 +28,9 @@
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         self.tableView.rowHeight = 44;
         self.tableView.tableFooterView = [UIView new];
-        _items = @[@"toast",
-                   @"status toast",
+        _items = @[@"status toast",
+                   @"push UIViewController",
+                   @"push UIViewController HideBar",
                    @"present UIViewController",
                    @"present UINavigationController",
                    @"notification toast",
@@ -46,6 +48,10 @@
     self.tableView.dataSource = self;
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.navigationController.navigationBar.hidden = NO;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -73,24 +79,29 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    if ([cell.textLabel.text isEqualToString:@"toast"]) {
-        UIWindow *keyWindow = [[UIApplication sharedApplication] keyWindow];
-        [keyWindow makeToast:cell.textLabel.text];
+    if ([cell.textLabel.text isEqualToString:@"status toast"]) {
+        showStatusToast(cell.textLabel.text);
     }
-    else if ([cell.textLabel.text isEqualToString:@"status toast"]) {
-        [self showToast:cell.textLabel.text];
+    else if ([cell.textLabel.text isEqualToString:@"push UIViewController"]) {
+        self.presentVC = [self nextVC];
+        [self.navigationController pushViewController:_presentVC animated:YES];
     }
     else if ([cell.textLabel.text isEqualToString:@"present UIViewController"]) {
-        UIViewController *VC = [self nextVC];
-        [self presentViewController:VC animated:YES completion:nil];
+        self.presentVC = [self nextVC];
+        [self presentViewController:_presentVC animated:YES completion:nil];
     }
     else if ([cell.textLabel.text isEqualToString:@"present UINavigationController"]) {
-        UINavigationController *VC = [self nextNav];
-        [self presentViewController:VC animated:YES completion:nil];
+        self.presentVC = [self nextNav];
+        [self presentViewController:_presentVC animated:YES completion:nil];
+    }
+    else if ([cell.textLabel.text isEqualToString:@"push UIViewController HideBar"]) {
+        self.presentVC = [self nextVC];
+        self.navigationController.navigationBar.hidden = YES;
+        [self.navigationController pushViewController:_presentVC animated:YES];
     }
     else if ([cell.textLabel.text isEqualToString:@"notification toast"]) {
         self.toast = [[MessagesToast alloc] init];
-        [self.view makeNotification:self.toast duration:1.5];
+        showNotificationToast(self.toast);
         
         self.toast.showCompletionBlock = ^(BSNotificationView *view, BOOL finish) {
             NSLog(@"show notification completion --- > %@", view);
@@ -114,6 +125,7 @@
     VC.view.backgroundColor = [UIColor yellowColor];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.tag = 1000;
     [button setBackgroundColor:[UIColor redColor]];
     [button setTitle:@"click me" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -125,34 +137,19 @@
     rect.size = CGSizeMake(100, 50);
     button.frame = rect;
     [VC.view addSubview:button];
-
-    [button bk_addEventHandler:^(id sender) {
-        
-        if ([[UIScreen mainScreen] bounds].size.height == 812.f && !VC.navigationController) {
-#if DEBUG
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"抱歉" message:@"当前toast的动画设计，不支持没有NavigationBar的iPhoneX，也不准备适配它，如果想要使用，请为你的Controller添加NavigationBar或者使用另外一种样式" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *action = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault handler:nil];
-            [alert addAction:action];
-            [VC presentViewController:alert animated:YES completion:nil];
-#endif
-        } else {
-            [VC showToast:@"newVC"];
-        }
-        
-    } forControlEvents:UIControlEventTouchUpInside];
+    
+    [button addTarget:self action:@selector(pr_clickButton:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
+    back.tag = 2000;
     [back setBackgroundColor:[UIColor redColor]];
     [back setTitle:@"back" forState:UIControlStateNormal];
     [back setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [back setTitleColor:[UIColor greenColor] forState:UIControlStateHighlighted];
-    CGFloat top = ([[UIScreen mainScreen] bounds].size.height == 812.f) ? 40 : 20;
-    back.frame = CGRectMake(20, top, 50, 30);
+    back.frame = CGRectMake(20, 20, 50, 30);
     [VC.view addSubview:back];
-
-    [back bk_addEventHandler:^(id sender) {
-        [VC dismissViewControllerAnimated:YES completion:nil];
-    } forControlEvents:UIControlEventTouchUpInside];
+    
+    [back addTarget:self action:@selector(pr_clickButton:) forControlEvents:UIControlEventTouchUpInside];
     
     return VC;
 }
@@ -160,6 +157,18 @@
 - (UINavigationController *)nextNav {
     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:[self nextVC]];
     return nav;
+}
+
+- (void)pr_clickButton:(UIButton *)button {
+    if (button.tag == 1000) {
+        showStatusToast(@"newVC");
+    } else {
+        if (self.presentVC.navigationController) {
+            [self.presentVC.navigationController popToRootViewControllerAnimated:YES];
+        } else {
+            [self.presentVC dismissViewControllerAnimated:YES completion:nil];
+        }
+    }
 }
 
 @end
