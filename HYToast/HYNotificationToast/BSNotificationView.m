@@ -66,10 +66,9 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
         self.tmpShowCompletionBlock = block;
     }
     
-    [[BSNotificationWindow sharedWindow] setHidden:NO];
-    [[BSNotificationWindow sharedWindow] makeKeyAndVisible];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
+     
+        [[BSNotificationWindow sharedWindow] setHidden:NO];
         
         BSNotificationBlock showAnimation = self.showAnimation;
         
@@ -85,11 +84,16 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
         self.tmpHideCompletionBlock = block;
     }
     
-    BSNotificationBlock hideAnimation = self.hideAnimation;
+    dispatch_async(dispatch_get_main_queue(), ^{
     
-    NSAssert(hideAnimation, @"show animation must be there");
+        BSNotificationBlock hideAnimation = self.hideAnimation;
+        
+        NSAssert(hideAnimation, @"show animation must be there");
+        
+        hideAnimation(self);
+        
+    });
     
-    hideAnimation(self);
 }
 
 
@@ -149,16 +153,14 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
                              
                          } completion:^(BOOL finished) {
                              
-                             if (finished) {
-                                 [self removeFromSuperview];
-                             }
+                             [self removeFromSuperview];
                              
                              if (self.hideCompletionBlock) {
-                                 self.hideCompletionBlock(self, finished);
+                                 self.hideCompletionBlock(self, YES);
                              }
                              
                              if (self.tmpHideCompletionBlock) {
-                                 self.tmpHideCompletionBlock(self, finished);
+                                 self.tmpHideCompletionBlock(self, YES);
                              }
                              
                              if (self.hideStautsBarWhenShowAnimation) {
@@ -167,7 +169,6 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
                              }
                              
                              [[BSNotificationWindow sharedWindow] setHidden:YES];
-                             [[[[UIApplication sharedApplication] delegate] window] makeKeyAndVisible];
                              
                          }];
         

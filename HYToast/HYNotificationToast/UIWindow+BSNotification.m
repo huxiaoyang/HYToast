@@ -35,7 +35,9 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
     if (objc_getAssociatedObject(self, &BSNotificationActiveViewKey) != nil ||
         self.pr_notificationQueue.count > 0) {
         
-        [self.pr_notificationQueue addObject:notification];
+        @synchronized (self) {
+            [self.pr_notificationQueue addObject:notification];
+        }
         
     } else {
         
@@ -142,14 +144,18 @@ static const void * BSNotificationDurtionKey      = @"com.XiaoYang.BSNotificatio
 
 // 展示队列中下一条数据
 - (void)pr_showNextNotification {
-    BSNotificationView *notification = [[self pr_notificationQueue] firstObject];
-    [[self pr_notificationQueue] removeObjectAtIndex:0];
     
-    NSTimeInterval duration = [objc_getAssociatedObject(notification, &BSNotificationDurtionKey) doubleValue];
+    @synchronized (self) {
+        BSNotificationView *notification = [[self pr_notificationQueue] firstObject];
+        [[self pr_notificationQueue] removeObjectAtIndex:0];
+        
+        NSTimeInterval duration = [objc_getAssociatedObject(notification, &BSNotificationDurtionKey) doubleValue];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self pr_showNotification:notification complation:nil];
+        });
+    }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self pr_showNotification:notification complation:nil];
-    });
 }
 
 #pragma mark - 队列
