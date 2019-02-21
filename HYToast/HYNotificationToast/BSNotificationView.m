@@ -45,7 +45,7 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
     self.hideStautsBarWhenShowAnimation = YES;
     self.impactFeedbackWhenShowAnimation = YES;
     CGFloat left = 10.f;
-    CGFloat top = ([[UIScreen mainScreen] bounds].size.height == 812.f) ? 40.f : 10.f;
+    CGFloat top = [BSNotificationView pr_isIphoneX] ? 40.f : 10.f;
     self.edgeInsets = UIEdgeInsetsMake(top, left, 0, left);
     self.showAnimation = [self showToastAnimation];
     self.hideAnimation = [self hideToastAnimation];
@@ -177,10 +177,21 @@ typedef void(^BSNotificationBlock)(BSNotificationView *);
     return block;
 }
 
+
+#pragma mark - private methods
+
++ (BOOL)pr_isIphoneX {
+    if (@available(iOS 11.0, *)) {
+        return !UIEdgeInsetsEqualToEdgeInsets(UIApplication.sharedApplication.keyWindow.safeAreaInsets, UIEdgeInsetsZero);
+    }
+    return NO;
+}
+
+
 #pragma mark - setter
 
 - (void)setHideStautsBarWhenShowAnimation:(BOOL)hideStautsBarWhenShowAnimation {
-    if ([[UIScreen mainScreen] bounds].size.height == 812.f) {
+    if ([BSNotificationView pr_isIphoneX]) {
         _hideStautsBarWhenShowAnimation = NO;
         return;
     }

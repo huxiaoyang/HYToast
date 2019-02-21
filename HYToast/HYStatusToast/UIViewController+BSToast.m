@@ -261,7 +261,10 @@ static const NSTimeInterval BSStatusToastFadeDuration     = 0.2;
 }
 
 + (BOOL)pr_isIphoneX {
-    return [[UIScreen mainScreen] bounds].size.height == 812.f;
+    if (@available(iOS 11.0, *)) {
+        return !UIEdgeInsetsEqualToEdgeInsets(UIApplication.sharedApplication.keyWindow.safeAreaInsets, UIEdgeInsetsZero);
+    }
+    return NO;
 }
 
 
